@@ -1,5 +1,7 @@
 <?php 
 
+session_start();
+
 	function printLoginForm() {
 ?>
 
@@ -27,7 +29,7 @@
 
 ?>
 
-			<h3>Something went wrong. Please try again</h3>
+			<h3>Something went wrong. Please try again.</h3>
 			
 <?php  
 
@@ -37,6 +39,11 @@
 
 ?>
 		<h2>Welcome to the secrets!</h2>
+
+		<form method="post">
+			<input type="submit" name="action" value="log out" action="index.php">
+		</form>
+		
 <?php
 
 	}
@@ -49,7 +56,9 @@
 
 		if ($email === $KNOWN_EMAIL && $password === $KNOWN_PASSWORD) {
 
-		return true;
+
+
+			return true;
 
 		} else {
 
@@ -57,6 +66,7 @@
 		}
 
 	}
+
 ?>
 
 
@@ -76,12 +86,31 @@
 
 
 <?php
+	
+	// if session exists
+	
+	
 	// if form was submitted...
-	if (!empty($_POST)) {
+
+
+    if (!empty($_POST)) {
+
+    	// if logging out
+
+    	if ('log out' === $_POST['action']) {
+
+    		$_SESSION['loggedIn'] = false;
+
+    		printLoginForm();
+    	
 		// if form was valid
-		if (isLogInValid($_POST['email'], $_POST['password'])) {
+		} else if (isLogInValid($_POST['email'], $_POST['password'])) {
+
+			$_SESSION['loggedIn'] = true;
+
 			// show success HTML
 			printSuccessHTML();
+
 		// else
 		} else {
 			// show error message
@@ -89,7 +118,13 @@
 			// show form HTML		
 			printLoginForm();
 		}
+	}
+
+	else if ($_SESSION && $_SESSION['loggedIn'] === true) {
+		//returning logged in user 
+		printSuccessHTML();
 	// else
+
 	} else {
 		// show form HTML
 		printLoginForm();
