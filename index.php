@@ -3,122 +3,56 @@ session_start();
 
 // FUNCTIONS
 
-	function printLoginForm() {
-?>
+// LOG IN VARIFICATION FUNCTIONALITY
 
-		<form method="post" >
-	 		<p>
-	 			<label for="email">email</label>
-	 		<input id="email" type="email" name="email" placeholder="Please enter your email address here."/>
-	 		</p>
-	 		<p>
-	 			<label for="password">Password</label>
-	 			<input id="password" type="password" name="password"/>
-	 		</p> 		
-	 		<p>
-	 			<input type="submit" name="action" value="log in" action="index.php">
-	 		</p>
-		</form>
+function isLogInValid($submittedEmail, $submittedPassword) {
 
-<?php
-	 	
-	}
+	// Database Settings
+	$db_server = "localhost";
+	$db_username = "root";
+	$db_password = "root";
+	$db_database = "scotchbox";
 
-	function printLoginError() {
+	// Create connection
+	$db_connection = new mysqli($db_server, $db_username, $db_password, $db_database);
 
-?>
+	// Check connection
+	if ($db_connection->connect_error) {
+	    die("Connection failed: " . $db_connection->connect_error);
+	} 
 
-		<h3>Something went wrong. Please try again.</h3>
-			
-<?php  
+	$query = "SELECT * FROM `users` WHERE `email` = '$submittedEmail';";
 
-	}
+	$result = mysqli_query($db_connection, $query);
 
-	function printWelcomeHTML() {
+	if (mysqli_num_rows($result) > 0){
 
-?>
-		<h2>Here are all the secrets!</h2>
+		$userInformation = mysqli_fetch_assoc($result);
 
-		<form method="post">
-			<input type="submit" name="action" value="log out" action="index.php">
-		</form>
-		
-<?php
+		// var_dump($userInformation);
 
-	}
-	function printsuccessHTML() {
+		if ($submittedEmail === $userInformation['email'] && $submittedPassword === $userInformation['password']) {
 
-?>
-		<h2>You have successfully logged in.</h2>
+			return true;
 
-<?php
+		} else {
 
-	}
-	
-	function printLogOutMessage() {
-?>
-		<h2>You have successfully logged out. </h2>
-<?php
-
-	}
-
-	// LOG IN VARIFICATION FUNCTIONALITY
-
-	function isLogInValid($submittedEmail, $submittedPassword) {
-
-		// Database Settings
-		$db_server = "localhost";
-		$db_username = "root";
-		$db_password = "root";
-		$db_database = "scotchbox";
-
-		// Create connection
-		$db_connection = new mysqli($db_server, $db_username, $db_password, $db_database);
-
-		// Check connection
-		if ($db_connection->connect_error) {
-		    die("Connection failed: " . $db_connection->connect_error);
-		} 
-
-		$query = "SELECT * FROM `users` WHERE `email` = '$submittedEmail';";
-
-		$result = mysqli_query($db_connection, $query);
-
-		if (mysqli_num_rows($result) > 0){
-
-			$userInformation = mysqli_fetch_assoc($result);
-
-			// var_dump($userInformation);
-
-			if ($submittedEmail === $userInformation['email'] && $submittedPassword === $userInformation['password']) {
-
-				return true;
-
-			} else {
-
-				return false;
-			}
-		}	
-	}
+			return false;
+		}
+	}	
+}
 ?>
 
 <!-- FUNCTIONS END -->
 
+
 <!-- BEGINNING OF HTML -->
 
-<!DOCTYPE html>
- <html>
- <head>
- 	<title>My Secret Site</title>
- </head>
- <body>
-
- 	<header>
- 		<h1>My Secret Site</h1>
- 	</header>
-
 <?php
-	
+
+include'snippets/header.php';
+
+
 	// if session exists
 	
 	
@@ -132,8 +66,10 @@ session_start();
     	if ('log out' === $_POST['action']) {
 
     		$_SESSION['loggedIn'] = false;
-    		printLogOutMessage();
-    		printLoginForm();
+    		//show logged out message
+    		include'snippets/log_out_message.php';
+    		//show login form
+    		include'snippets/login_form.php';
     	
 		// if form was valid
 		} else if (isLogInValid($_POST['email'], $_POST['password'])) {
@@ -141,9 +77,10 @@ session_start();
 			$_SESSION['loggedIn'] = true;
 
 			// show success HTML
-			printSuccessHTML();
+			include'snippets/successful_login.php';
+			
 			// show welcome HTML
-			printWelcomeHTML();
+			include'snippets/welcome_message.php';
 
 		// else
 		} else {
@@ -156,17 +93,15 @@ session_start();
 
 	else if ($_SESSION && $_SESSION['loggedIn'] === true) {
 		//returning logged in user welcome
-		printWelcomeHTML();
+		include'snippets/welcome_message.php';
 	// else
 
 	} else {
 		// show form HTML
-		printLoginForm();
+		include'snippets/login_form.php';
 	}
 
+include'snippets/footer.php';
 ?>
-
- </body>
- </html>
 
  <!-- END OF HTML -->
