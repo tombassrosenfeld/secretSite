@@ -1,6 +1,20 @@
 <?php 
-
 session_start();
+
+
+
+		
+
+		
+
+
+
+
+
+
+
+
+// FUNCTIONS
 
 	function printLoginForm() {
 ?>
@@ -10,12 +24,10 @@ session_start();
 	 			<label for="email">email</label>
 	 		<input id="email" type="email" name="email" placeholder="Please enter your email address here."/>
 	 		</p>
-
 	 		<p>
 	 			<label for="password">Password</label>
 	 			<input id="password" type="password" name="password"/>
-	 		</p>
-	 		
+	 		</p> 		
 	 		<p>
 	 			<input type="submit" name="action" value="log in" action="index.php">
 	 		</p>
@@ -23,7 +35,6 @@ session_start();
 <?php
 	 	
 	}
-
 
 	function printLoginError() {
 
@@ -64,16 +75,42 @@ session_start();
 
 	}
 
+	// LOG IN VARIFICATION FUNCTIONALITY
 
-	function isLogInValid($email, $password) {
+	function isLogInValid($submittedEmail, $submittedPassword) {
 
-		$KNOWN_EMAIL = "myemail@myemailprovider.com";
+		// Database Settings
+		$db_server = "localhost";
+		$db_username = "root";
+		$db_password = "root";
+		$db_database = "scotchbox";
 
-		$KNOWN_PASSWORD = "letmein";
 
-		if ($email === $KNOWN_EMAIL && $password === $KNOWN_PASSWORD) {
+		// Create connection
+		$db_connection = new mysqli($db_server, $db_username, $db_password, $db_database);
 
+		// Check connection
+		if ($db_connection->connect_error) {
+		    die("Connection failed: " . $db_connection->connect_error);
+		} 
 
+		$query = 'SELECT * FROM `users` WHERE `email` = "oliward@ow.com";';
+
+		$result = mysqli_query($db_connection, $query);
+
+		if (mysqli_num_rows($result) > 0){
+
+			// while($userInformation = mysqli_fetch_assoc($result)){
+			// 	var_dump($userInformation);
+			// }
+
+			$userInformation = mysqli_fetch_assoc($result);
+		}
+		
+		var_dump($userInformation);
+		
+
+		if ($submittedEmail === $userInformation['email'] && $submittedPassword === $userInformation['password']) {
 
 			return true;
 
@@ -86,7 +123,7 @@ session_start();
 
 ?>
 
-
+<!-- FUNCTIONS END -->
 
 <!-- BEGINNING OF HTML -->
 
@@ -100,7 +137,6 @@ session_start();
  	<header>
  		<h1>My Secret Site</h1>
  	</header>
-
 
 <?php
 	
@@ -153,3 +189,5 @@ session_start();
 
  </body>
  </html>
+
+ <!-- END OF HTML -->
