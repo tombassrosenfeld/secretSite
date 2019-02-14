@@ -1,60 +1,16 @@
 <?php 
 session_start();
 
-// FUNCTIONS
+//DATABASE RELATED FUNCTIONS
 
-// LOG IN VARIFICATION FUNCTIONALITY
-
-function isLogInValid($submittedEmail, $submittedPassword) {
-
-	// Database Settings
-	$db_server = "localhost";
-	$db_username = "root";
-	$db_password = "root";
-	$db_database = "scotchbox";
-
-	// Create connection
-	$db_connection = new mysqli($db_server, $db_username, $db_password, $db_database);
-
-	// Check connection
-	if ($db_connection->connect_error) {
-	    die("Connection failed: " . $db_connection->connect_error);
-	} 
-
-	$query = "SELECT * FROM `users` WHERE `email` = '$submittedEmail';";
-
-	$result = mysqli_query($db_connection, $query);
-
-	if (mysqli_num_rows($result) > 0){
-
-		$userInformation = mysqli_fetch_assoc($result);
-
-		// var_dump($userInformation);
-
-		if ($submittedEmail === $userInformation['email'] && $submittedPassword === $userInformation['password']) {
-
-			return true;
-
-		} else {
-
-			return false;
-		}
-	}	
-}
-?>
-
-<!-- FUNCTIONS END -->
+include'snippets/database.php';
 
 
-<!-- BEGINNING OF HTML -->
 
-<?php
+// BEGINNING OF HTML 
 
 include'snippets/header.php';
 
-
-	// if session exists
-	
 	
 	// if form was submitted...
 
@@ -71,7 +27,8 @@ include'snippets/header.php';
     		//show login form
     		include'snippets/login_form.php';
     	
-		// if form was valid
+		// if login was valid
+
 		} else if (isLogInValid($_POST['email'], $_POST['password'])) {
 
 			$_SESSION['loggedIn'] = true;
@@ -85,23 +42,26 @@ include'snippets/header.php';
 		// else
 		} else {
 			// show error message
-			printLoginError();
+			include'snippets/login_error.php';
 			// show form HTML		
-			printLoginForm();
+			include'snippets/login_form.php';
 		}
 	}
+	// if session exists
 
 	else if ($_SESSION && $_SESSION['loggedIn'] === true) {
 		//returning logged in user welcome
 		include'snippets/welcome_message.php';
+
 	// else
 
 	} else {
-		// show form HTML
+		// show form HTML	
 		include'snippets/login_form.php';
+		include'snippets/sign_up_form.php';
 	}
 
 include'snippets/footer.php';
-?>
 
- <!-- END OF HTML -->
+// END OF HTML
+?>
