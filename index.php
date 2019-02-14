@@ -1,19 +1,6 @@
 <?php 
 session_start();
 
-
-
-		
-
-		
-
-
-
-
-
-
-
-
 // FUNCTIONS
 
 	function printLoginForm() {
@@ -31,7 +18,8 @@ session_start();
 	 		<p>
 	 			<input type="submit" name="action" value="log in" action="index.php">
 	 		</p>
- 		</form>
+		</form>
+
 <?php
 	 	
 	}
@@ -40,7 +28,7 @@ session_start();
 
 ?>
 
-			<h3>Something went wrong. Please try again.</h3>
+		<h3>Something went wrong. Please try again.</h3>
 			
 <?php  
 
@@ -63,7 +51,6 @@ session_start();
 ?>
 		<h2>You have successfully logged in.</h2>
 
-		
 <?php
 
 	}
@@ -85,7 +72,6 @@ session_start();
 		$db_password = "root";
 		$db_database = "scotchbox";
 
-
 		// Create connection
 		$db_connection = new mysqli($db_server, $db_username, $db_password, $db_database);
 
@@ -94,33 +80,26 @@ session_start();
 		    die("Connection failed: " . $db_connection->connect_error);
 		} 
 
-		$query = 'SELECT * FROM `users` WHERE `email` = "oliward@ow.com";';
+		$query = "SELECT * FROM `users` WHERE `email` = '$submittedEmail';";
 
 		$result = mysqli_query($db_connection, $query);
 
 		if (mysqli_num_rows($result) > 0){
 
-			// while($userInformation = mysqli_fetch_assoc($result)){
-			// 	var_dump($userInformation);
-			// }
-
 			$userInformation = mysqli_fetch_assoc($result);
-		}
-		
-		// var_dump($userInformation);
-		
 
-		if ($submittedEmail === $userInformation['email'] && $submittedPassword === $userInformation['password']) {
+			// var_dump($userInformation);
 
-			return true;
+			if ($submittedEmail === $userInformation['email'] && $submittedPassword === $userInformation['password']) {
 
-		} else {
+				return true;
 
-			false;
-		}
+			} else {
 
+				return false;
+			}
+		}	
 	}
-
 ?>
 
 <!-- FUNCTIONS END -->
