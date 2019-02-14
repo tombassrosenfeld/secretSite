@@ -45,8 +45,15 @@ session_start();
 		</form>
 		
 <?php
+	}
+	
+	function printLogOutMessage() {
+?>
+		<h2>You have successfully logged out. </h2>
+<?php
 
 	}
+
 
 	function isLogInValid($email, $password) {
 
@@ -100,7 +107,7 @@ session_start();
     	if ('log out' === $_POST['action']) {
 
     		$_SESSION['loggedIn'] = false;
-
+    		printLogOutMessage();
     		printLoginForm();
     	
 		// if form was valid
