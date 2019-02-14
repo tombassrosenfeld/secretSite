@@ -35,16 +35,26 @@ session_start();
 
 	}
 
-	function printSuccessHTML() {
+	function printWelcomeHTML() {
 
 ?>
-		<h2>Welcome to the secrets!</h2>
+		<h2>Here are all the secrets!</h2>
 
 		<form method="post">
 			<input type="submit" name="action" value="log out" action="index.php">
 		</form>
 		
 <?php
+
+	}
+	function printsuccessHTML() {
+
+?>
+		<h2>You have successfully logged in.</h2>
+
+		
+<?php
+
 	}
 	
 	function printLogOutMessage() {
@@ -117,6 +127,8 @@ session_start();
 
 			// show success HTML
 			printSuccessHTML();
+			// show welcome HTML
+			printWelcomeHTML();
 
 		// else
 		} else {
@@ -128,8 +140,8 @@ session_start();
 	}
 
 	else if ($_SESSION && $_SESSION['loggedIn'] === true) {
-		//returning logged in user 
-		printSuccessHTML();
+		//returning logged in user welcome
+		printWelcomeHTML();
 	// else
 
 	} else {
