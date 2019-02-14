@@ -107,7 +107,7 @@ session_start();
 			$userInformation = mysqli_fetch_assoc($result);
 		}
 		
-		var_dump($userInformation);
+		// var_dump($userInformation);
 		
 
 		if ($submittedEmail === $userInformation['email'] && $submittedPassword === $userInformation['password']) {
