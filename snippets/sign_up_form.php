@@ -4,14 +4,14 @@
 <form method="post">
 	<p>
 		<label for="first name">First Name</label>
-		<input id="first name" type="text" name="first name"/>
+		<input id="first name" type="text" name="firstname"/>
 	</p>
 	<p>
 		<label for="surname">Surname</label>
 		<input id="surname" type="text" name="surname"/>
 	</p>
 	<p>
-		<label for="email">Surname</label>
+		<label for="email">email</label>
 		<input id="email" type="email" name="email"/>
 	
 	</p>

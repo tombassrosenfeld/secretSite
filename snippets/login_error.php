@@ -1,3 +1,3 @@
-<h3>Something went wrong.</h3>
+<h3>Something went wrong. Have you <a href="#">forgotten your password?</a></h3>
 
-<p>Please try again.</p>
+<p>Or try again.</p>
